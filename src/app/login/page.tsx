@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import InputField from "@/components/InputField";
 
 export default function LoginPage() {
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -46,8 +48,10 @@ export default function LoginPage() {
         });
         const data = await response.json();
         if (response.ok) {
+          localStorage.setItem("token", data.token);
           setSuccess(true);
           setForm({ email: "", password: "" });
+          router.push("/");
         } else {
           setServerError(data.error || "Error al iniciar sesión.");
         }
