@@ -14,7 +14,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function NavBar() {
+export default function NavBar({ userName }: { userName: string }) {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -77,11 +77,9 @@ export default function NavBar() {
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  <img
-                    alt=""
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="size-8 rounded-full"
-                  />
+                  <span className="w-10 h-10 flex items-center justify-center rounded-full text-black bg-gray-400 border border-white font-bold text-3xl" style={{ ['-webkit-text-stroke']: '1px white' } as any}>
+                    {userName?.charAt(0).toUpperCase()}
+                  </span>
                 </MenuButton>
               </div>
               <MenuItems
