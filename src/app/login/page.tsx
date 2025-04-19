@@ -3,83 +3,59 @@
 import React, { useState } from "react";
 import InputField from "@/components/InputField";
 
-export default function RegisterPage() {
-  // Estado del formulario
+export default function LoginPage() {
   const [form, setForm] = useState({
-    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
-
-  // Estado para errores de validación
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  // Estado para saber si el formulario fue enviado con éxito
-  const [submitted, setSubmitted] = useState(false);
-  // Estado para mensajes de error del servidor
   const [serverError, setServerError] = useState("");
-  // Estado de carga
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  // Función para validar los datos del formulario
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-
-    if (!form.name.trim()) newErrors.name = "Por favor, ingresa tu nombre.";
     if (!form.email.trim()) {
-      newErrors.email = "Necesitamos tu correo electrónico.";
+      newErrors.email = "El correo es obligatorio.";
     } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
-      newErrors.email = "Ese correo no parece válido.";
+      newErrors.email = "Correo inválido.";
     }
-
-    if (!form.password) newErrors.password = "Ingresa una contraseña segura.";
-    if (!form.confirmPassword)
-      newErrors.confirmPassword = "Confirma tu contraseña.";
-    else if (form.password !== form.confirmPassword)
-      newErrors.confirmPassword = "Ups... las contraseñas no coinciden.";
-
+    if (!form.password) newErrors.password = "La contraseña es obligatoria.";
     return newErrors;
   };
 
-  // Manejador para los cambios en los inputs
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // Manejador para el envío del formulario
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError("");
+    setSuccess(false);
     const validationErrors = validateForm();
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
-      setSubmitted(false);
       try {
-        const response = await fetch("/api/register", {
+        const response = await fetch("/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form }),
+          body: JSON.stringify(form),
         });
         const data = await response.json();
         if (response.ok) {
-          console.log(data);
-          setSubmitted(true);
-          setForm({ name: "", email: "", password: "", confirmPassword: "" });
+          setSuccess(true);
+          setForm({ email: "", password: "" });
         } else {
-          setServerError(data.error || "Ocurrió un error inesperado.");
+          setServerError(data.error || "Error al iniciar sesión.");
         }
       } catch (err) {
         setServerError("No se pudo conectar con el servidor.");
       } finally {
         setLoading(false);
       }
-    } else {
-      setSubmitted(false);
     }
   };
 
@@ -87,30 +63,17 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
       <div className="w-full max-w-md bg-[#181818] rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold mb-6 text-center text-[var(--foreground)]">
-          ¡Crea tu cuenta!
+          Iniciar sesión
         </h1>
-
-        {submitted && (
+        {success && (
           <div className="text-green-500 text-center mb-4">
-            🎉 ¡Registro completado con éxito!
+            ¡Bienvenido de nuevo!
           </div>
         )}
         {serverError && (
-          <div className="text-red-500 text-center mb-4">
-            {serverError}
-          </div>
+          <div className="text-red-500 text-center mb-4">{serverError}</div>
         )}
         <form onSubmit={handleFormSubmit} noValidate>
-          {/* Campo: Nombre */}
-          <InputField
-            label="Nombre"
-            name="name"
-            value={form.name}
-            onChange={handleInputChange}
-            error={errors.name}
-          />
-
-          {/* Campo: Correo */}
           <InputField
             label="Correo electrónico"
             name="email"
@@ -119,8 +82,6 @@ export default function RegisterPage() {
             onChange={handleInputChange}
             error={errors.email}
           />
-
-          {/* Campo: Contraseña */}
           <InputField
             label="Contraseña"
             name="password"
@@ -129,27 +90,16 @@ export default function RegisterPage() {
             onChange={handleInputChange}
             error={errors.password}
           />
-
-          {/* Campo: Confirmar contraseña */}
-          <InputField
-            label="Confirmar contraseña"
-            name="confirmPassword"
-            type="password"
-            value={form.confirmPassword}
-            onChange={handleInputChange}
-            error={errors.confirmPassword}
-          />
-
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors disabled:opacity-60"
             disabled={loading}
           >
-            {loading ? "Registrando..." : "Registrarse"}
+            {loading ? "Ingresando..." : "Iniciar sesión"}
           </button>
           <p className="text-center text-sm text-[var(--foreground)] mt-4">
-            ¿Ya tienes cuenta?{' '}
-            <a href="/login" className="text-blue-400 hover:underline">Inicia sesión</a>
+            ¿No tienes cuenta?{' '}
+            <a href="/register" className="text-blue-400 hover:underline">Regístrate</a>
           </p>
         </form>
       </div>
