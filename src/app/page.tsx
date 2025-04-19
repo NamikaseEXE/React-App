@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import NavBar from "@/components/NavBar";
 
 export default function Home() {
   const router = useRouter();
@@ -31,11 +31,6 @@ export default function Home() {
     }
   }, [router]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
-  };
-
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -45,16 +40,13 @@ export default function Home() {
   }
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="text-3xl text-[var(--foreground)">Bienvenido -&gt;
-        <div className="font-bold inline bg-amber-50 rounded-2xl p-1 ms-1 text-black"> {userName ? userName : "Invitado"}</div>
+    <>
+      <NavBar />
+      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="text-3xl text-[var(--foreground)">Bienvenido -&gt;
+          <div className="font-bold inline bg-amber-50 rounded-2xl p-1 ms-1 text-black"> {userName ? userName : "Invitado"}</div>
+        </div>
       </div>
-      <button
-        onClick={handleLogout}
-        className="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
-      >
-        Cerrar sesión
-      </button>
-    </div>
+    </>
   );
 }
