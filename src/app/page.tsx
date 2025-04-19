@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <>
-      <NavBar userName={userName!}/>
+      <NavBar/>
       <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">
         <div className="text-3xl text-[var(--foreground)">Bienvenido -&gt;
           <div className="font-bold inline bg-amber-50 rounded-2xl p-1 ms-1 text-black"> {userName}</div>

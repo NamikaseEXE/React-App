@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 const navigation = [
 
-  { name: 'Dashboard', href: '#', current: true },
+  { name: 'Dashboard', href: '/', current: true },
   { name: 'Team', href: '#', current: false },
   { name: 'Projects', href: '#', current: false },
   { name: 'Calendar', href: '#', current: false },
@@ -14,14 +14,28 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function NavBar({ userName }: { userName: string }) {
+export default function NavBar() {
   const router = useRouter();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     router.push("/login");
   };
+
+  const token = localStorage.getItem("token");
   
+  function getUserNameFromToken(token: string | null): string | null {
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.name || 'Invitado';
+    } catch {
+      return 'Invitado';
+    }
+  }
+
+  const userName = getUserNameFromToken(token);
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -88,7 +102,7 @@ export default function NavBar({ userName }: { userName: string }) {
               >
                 <MenuItem>
                   <a
-                    href="#"
+                    href="/profile"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Your Profile
