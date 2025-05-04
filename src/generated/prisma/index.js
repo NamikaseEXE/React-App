@@ -124,7 +124,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/mac/Projects/react-app/src/generated/prisma",
+      "value": "/Users/alexis/con_carlo/React-App/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -138,12 +138,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/mac/Projects/react-app/prisma/schema.prisma",
+    "sourceFilePath": "/Users/alexis/con_carlo/React-App/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.6.0",
@@ -152,11 +151,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://mac:@localhost:5432/next-app?schema=public"
+        "value": null
       }
     }
   },
